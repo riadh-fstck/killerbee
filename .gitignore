@@ -1,3 +1,4 @@
 mongo
 mysql
-front/node_modules
+store-front/node_modules
+backoffice/node_modules
