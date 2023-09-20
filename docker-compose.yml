@@ -1,69 +1,76 @@
 version: "3"
 services:
-  mysqldb:
-    image: mysql:5.7
-    container_name: mysqldb
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: challenge-s2
-      MYSQL_USER: user
-      MYSQL_PASSWORD: challenge-s2
+  postgresdb:
+    image: postgres:15.2-alpine
+    container_name: postgresdb
     ports:
-      - 3306:3306
-    volumes:
-      - ./mysql:/var/lib/mysql
-
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: always
+      - "5432:5432"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: challenge-s2
-      MONGO_INITDB_DATABASE: challenge-s2
-    ports:
-      - 27017:27017
-    volumes:
-      - ./mongo:/data/db
+      POSTGRES_DB: SneakPeak
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: challenge-s2
 
-  # backend:
-  #   image: node:latest
-  #   container_name: backend
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+
+  # mongodb:
+  #   image: mongo:latest
+  #   container_name: mongodb
   #   restart: always
-  #   working_dir: /app
-  #   volumes:
-  #     - ./back:/app
-  #   command: npm run serve
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: challenge-s2
+  #     MONGO_INITDB_DATABASE: challenge-s2
   #   ports:
-  #     - 8080:8080
+  #     - 27017:27017
+  #   volumes:
+  #     - ./mongo:/data/db
+
+  api:
+    image: node:latest
+    container_name: api
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./api:/app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - 3000:3000
 
   #service vuejs
-  frontend:
+  client:
     image: node:20.0.0-alpine
+    container_name: client
     ports:
       - 127.0.0.1:5173:5173
     volumes:
-      - ./front:/home/node
+      - ./client:/home/node
     working_dir: /home/node
     command: sh -c "npm install && npm run dev -- --host"
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: always
-    environment:
-      PMA_HOST: mysqldb
-      PMA_PORT: 3306
+  dashboard:
+    image: node:20.0.0-alpine
+    container_name: dashboard
     ports:
-      - 8080:80
+      - 127.0.0.1:5174:5173
+    volumes:
+      - ./dashboard:/home/node
+    working_dir: /home/node
+    command: sh -c "npm install && npm run dev -- --host"
 
-  mongo-express:
-    image: mongo-express
-    restart: always
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
     ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: challenge-s2
-      ME_CONFIG_MONGODB_URL: mongodb://root:challenge-s2@mongodb:27017
+      - 8080:8080
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: challenge-s2
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:challenge-s2@mongodb:27017
