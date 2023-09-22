@@ -23,6 +23,10 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        passwordUpdatedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         role: {
             type: DataTypes.ENUM(
                 "ROLE_ADMIN",
@@ -34,7 +38,33 @@ User.init(
         },
         address: {
             type: DataTypes.STRING,
+            allowNull: true,
+        },
+        city: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        postalCode: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        loginAttempts: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: false,
+        },
+        isValidate: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+        },
+        authentificationToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
     },
     {

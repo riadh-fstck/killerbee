@@ -13,6 +13,6 @@ const sequelize = new Sequelize(process.env.POSTGRES_URI, {
 	logging: false, // Désactive les logs Sequelize
 });
 
-sequelize.sync();
+sequelize.sync({ force: true });
 
 export default sequelize;
