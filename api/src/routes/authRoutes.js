@@ -2,6 +2,7 @@ import User from "../models/postgres-user.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { generateAuthentificationToken } from "../services/auth.service.js";
+import { sendEmailConfirmation } from "../services/email.service.js";
 
 export const register = async (req, res) => {
     try {
@@ -39,8 +40,12 @@ export const register = async (req, res) => {
 
         const token = jwt.sign(payload, process.env.SECRET_KEY, options);
 
+        const isEmailSent = await sendEmailConfirmation(email, authentificationToken);
+
         res.json({
-            message: "User created successfully",
+            message: isEmailSent
+                ? "User created successfully"
+                : "User created successfully but email not sent",
             token: token,
         });
     } catch (error) {
@@ -95,9 +100,9 @@ export const login = async (req, res) => {
     }
 };
 
-export const validateEmail = async (req, res) => {
+export const confirmEmail = async (req, res) => {
     try {
-        const { email, authentificationToken } = req.body;
+        const { email, authentificationToken } = req.query;
 
         const user = await User.findOne({
             where: { email },
@@ -114,7 +119,7 @@ export const validateEmail = async (req, res) => {
         );
 
         res.json({
-            message: "Email validated successfully",
+            message: "Email confirmed successfully",
         });
     } catch (error) {
         res.status(500).json({
