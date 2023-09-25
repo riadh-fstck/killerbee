@@ -57,6 +57,10 @@ User.init(
             defaultValue: 0,
             allowNull: false,
         },
+        blockedAt: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         isValidate: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,

@@ -39,3 +39,33 @@ export const sendEmailConfirmation = async (email, token) => {
         console.error(`Error sending confirmation email : ${error}`);
     }
 };
+
+export const sendBlockedAccountEmail = async (email) => {
+    try {
+        const htmlTemplate = fs.readFileSync(
+            path.join(__dirname, "../templates/blocked-user-notification.html"),
+            "utf8"
+        );
+
+        await sendEmail(email, htmlTemplate);
+
+        return true;
+    } catch (error) {
+        console.error(`Error sending blocked account email : ${error}`);
+    }
+}
+
+export const sendPasswordChangeReminderEmail = async (email) => {
+    try {
+        const htmlTemplate = fs.readFileSync(
+            path.join(__dirname, "../templates/password-change-reminder.html"),
+            "utf8"
+        );
+
+        await sendEmail(email, htmlTemplate);
+
+        return true;
+    } catch (error) {
+        console.error(`Error sending password change reminder email : ${error}`);
+    }
+}

@@ -1,8 +1,14 @@
 import User from "../models/postgres-user.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { generateAuthentificationToken } from "../services/auth.service.js";
-import { sendEmailConfirmation } from "../services/email.service.js";
+import {
+    generateAuthentificationToken,
+    isUserBlocked,
+} from "../services/auth.service.js";
+import {
+    sendEmailConfirmation,
+    sendBlockedAccountEmail,
+} from "../services/email.service.js";
 
 export const register = async (req, res) => {
     try {
@@ -40,7 +46,10 @@ export const register = async (req, res) => {
 
         const token = jwt.sign(payload, process.env.SECRET_KEY, options);
 
-        const isEmailSent = await sendEmailConfirmation(email, authentificationToken);
+        const isEmailSent = await sendEmailConfirmation(
+            email,
+            authentificationToken
+        );
 
         res.json({
             message: isEmailSent
@@ -61,15 +70,40 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user)
             return res.status(401).json({ message: "Invalid credentials" });
+
+        if (isUserBlocked(user)) {
+            const isEmailSent = await sendBlockedAccountEmail(email);
+            return res
+                .status(401)
+                .json({
+                    message: isEmailSent
+                        ? "User is temporarily blocked"
+                        : "User is temporarily blocked but email not sent",
+                });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            user.loginAttempts = user.loginAttempts
+                ? user.loginAttempts + 1
+                : 1;
+            if (user.loginAttempts >= 3) user.blockedAt = new Date();
+            user.save();
+            return res.status(401).json({
+                message: "Invalid credentials",
+                loginAttempts: user.loginAttempts,
+            });
         }
+
+        if (user.loginAttempts) user.loginAttempts = 0;
+        if (user.blockedAt) user.blockedAt = null;
+        user.save();
+
+        if (!user.isValidate)
+            return res.status(401).json({ message: "Email not confirmed" });
 
         const payload = {
             userId: user.id,
