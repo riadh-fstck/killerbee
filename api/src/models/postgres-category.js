@@ -1,10 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/sequelize-config.js";
+import { Sequelize } from "sequelize";
 
 class Category extends Model {}
 
 Category.init(
 	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			primaryKey: true,
+		},
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -17,6 +23,7 @@ Category.init(
 	{
 		sequelize,
 		timestamps: true,
+		paranoid: true,
 		modelName: "Category",
 	}
 );

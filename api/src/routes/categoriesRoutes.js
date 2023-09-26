@@ -23,3 +23,51 @@ export const createCategory = async (req, res) => {
 		});
 	}
 };
+
+export const updateCategory = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const categoryDataToUpdate = req.body;
+
+		if (!id) {
+			return res.status(400).json({ message: "Id parameter is missing" });
+		}
+
+		const category = await Category.findOne({ where: { id } });
+
+		if (!category)
+			return res.status(404).json({ message: "Category not found" });
+
+		await category.update(categoryDataToUpdate);
+		res.json({ message: "Category updated successfully" });
+	} catch (error) {
+		res.status(500).json({
+			error: `An error occurred while updating the category : ${error}`,
+		});
+	}
+};
+
+export const deleteCategory = async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).json({ message: "Id parameter is missing" });
+		}
+
+		const category = await Category.findOne({ where: { id } });
+
+		if (!category)
+			return res.status(404).json({ message: "Category not found" });
+
+		await category.destroy();
+
+		res.json({
+			message: "Category deleted successfully",
+		});
+	} catch (error) {
+		res.status(500).json({
+			error: `An error occurred while deleting the category : ${error}`,
+		});
+	}
+};

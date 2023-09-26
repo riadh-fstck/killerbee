@@ -6,6 +6,11 @@ class Brand extends Model {}
 
 Brand.init(
 	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			primaryKey: true,
+		},
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -14,6 +19,7 @@ Brand.init(
 	{
 		sequelize,
 		timestamps: true,
+		paranoid: true,
 		modelName: "Brand",
 	}
 );

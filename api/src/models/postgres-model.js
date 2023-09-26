@@ -13,14 +13,6 @@ Modele.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		categoryId: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-		},
-		brandId: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-		},
 		description: {
 			type: DataTypes.STRING,
 			allowNull: true,
@@ -29,6 +21,7 @@ Modele.init(
 	{
 		sequelize,
 		timestamps: true,
+		paranoid: true,
 		modelName: "Model",
 	}
 );
@@ -37,12 +30,9 @@ let Category;
 let Brand;
 import("./postgres-category.js")
 	.then((module) => {
-		Modele = module.default;
+		Category = module.default;
 
-		Modele.belongsTo(Category, {
-			foreignKey: "categoryId",
-			as: "category",
-		});
+		Modele.belongsTo(Category);
 	})
 	.catch((error) => {
 		console.error("Erreur lors de l'importation du modèle Modele :", error);
@@ -50,12 +40,9 @@ import("./postgres-category.js")
 
 import("./postgres-brand.js")
 	.then((module) => {
-		Modele = module.default;
+		Brand = module.default;
 
-		Modele.belongsTo(Brand, {
-			foreignKey: "brandId",
-			as: "brand",
-		});
+		Modele.belongsTo(Brand);
 	})
 	.catch((error) => {
 		console.error("Erreur lors de l'importation du modèle Modele :", error);
