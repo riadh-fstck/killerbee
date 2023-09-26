@@ -1,5 +1,10 @@
 import User from "../models/postgres-user.js";
-import { isValidPassword } from "../services/user.service.js";
+import { sendDeletedAccountEmail } from "../services/email.service.js";
+import {
+    isValidPassword,
+    anonymizeUserData,
+    generateEncryptionKey,
+} from "../services/user.service.js";
 import bcrypt from "bcrypt";
 
 export const getUsers = async (req, res) => {
@@ -58,6 +63,43 @@ export const updateUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             error: `An error occurred while updating the user : ${error}`,
+        });
+    }
+};
+
+export const deleteUser = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        if (!email) {
+            return res
+                .status(400)
+                .json({ message: "Email parameter is missing" });
+        }
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const encryptionKey = generateEncryptionKey();
+
+        const anonymizedData = anonymizeUserData(user, encryptionKey);
+
+        await user.update(
+            { ...anonymizedData, encryptionKey, disabled: true },
+            { where: { email } }
+        );
+
+        const isEmailSent = await sendDeletedAccountEmail(email, encryptionKey);
+
+        res.json({
+            message: isEmailSent
+                ? "User deleted successfully"
+                : "User deleted successfully but email not sent",
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: `An error occurred while deleting the user : ${error}`,
         });
     }
 };
