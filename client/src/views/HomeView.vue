@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import LayoutComponent from "../layout/LayoutComponent.vue";
-import HeroSection from "../sections/home/HeroSection.vue";
 import CategorySection from "../sections/home/CategorySection.vue";
 import FeaturedSection from "../sections/home/FeaturedSection.vue";
 import FavoriteSection from "../sections/home/FavoriteSection.vue";
 import CtaSection from "../sections/home/CtaSection.vue";
+import HeroSection from "@/sections/home/HeroSection.vue";
 
 const favorites = [
   {
@@ -37,11 +37,10 @@ const favorites = [
 
 <template>
   <LayoutComponent>
-    <main>
+      <HeroSection/>
       <CategorySection/>
       <FeaturedSection/>
       <FavoriteSection :favorites="favorites"/>
       <CtaSection/>
-    </main>
   </LayoutComponent>
 </template>
