@@ -1,7 +1,7 @@
 const fieldsToAnonymize = [
     'firstname',
     'lastname',
-    // 'email',
+    'email',
     'address',
     'city',
     'postalCode',
