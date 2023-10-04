@@ -1,6 +1,7 @@
 import Sequelize, { DataTypes, Model } from "sequelize";
 import sequelize from "../config/sequelize-config.js";
 import Process from "./postgres-process.js";
+import Ingredient from "./postgres-ingredient.js";
 
 class Modele extends Model {}
 
@@ -43,5 +44,9 @@ Modele.init(
 Modele.hasMany(Process, {
 	foreignKey: 'modele_id'
 });
+
+Modele.hasMany(Ingredient, {
+	foreignKey: 'modele_id'
+})
 
 export default Modele;

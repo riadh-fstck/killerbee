@@ -11,6 +11,11 @@ Ingredient.init(
 			defaultValue: Sequelize.UUIDV4,
 			primaryKey: true,
 		},
+		modele_id: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			foreignKey: true,
+		},
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,

@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import {DialogPanel, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot,} from '@headlessui/vue'
+import {Dialog, DialogPanel, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot,} from '@headlessui/vue'
 import {
   Bars3Icon,
   BellIcon,
@@ -8,20 +8,20 @@ import {
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
+  XMarkIcon
 } from '@heroicons/vue/24/outline'
 import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/vue/20/solid'
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const navigation = [
-  {name: 'dashboard', href: '/', icon: HomeIcon, current: true},
-  {name: 'Models', href: '/models', icon: FolderIcon, current: false},
-  {name: 'Process', href: '/process', icon: CalendarIcon, current: false},
-  {name: 'Ingredients', href: '/ingredients', icon: DocumentDuplicateIcon, current: false},
+  {name: 'dashboard', href: '/', icon: HomeIcon, current: router.currentRoute.value.path === '/'},
+  {name: 'Models', href: '/models', icon: FolderIcon, current: router.currentRoute.value.path === '/models'},
+  {name: 'Process', href: '/process', icon: CalendarIcon, current: router.currentRoute.value.path === '/process'},
+  {name: 'Ingredients', href: '/ingredients', icon: DocumentDuplicateIcon, current: router.currentRoute.value.path === '/ingredients'},
 ]
-const teams = [
-  {id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false},
-  {id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false},
-  {id: 3, name: 'Workcation', href: '#', initial: 'W', current: false},
-]
+
 const userNavigation = [
   {name: 'Your profile', href: '#'},
   {name: 'Sign out', href: '#'},
@@ -58,7 +58,7 @@ const sidebarOpen = ref(false)
                     <li>
                       <ul role="list" class="-mx-2 space-y-1">
                         <li v-for="item in navigation" :key="item.name">
-                          <a :href="item.href" :class="[item.current ? 'bg-cyan-700 text-white' : 'text-cyan-200 hover:text-white hover:bg-cyan-700', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                          <a :href="item.href" :class="[item.current  ? 'bg-cyan-700 text-white' : 'text-cyan-200 hover:text-white hover:bg-cyan-700', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
                             <component :is="item.icon" :class="[item.current ? 'text-white' : 'text-cyan-200 group-hover:text-white', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                             {{ item.name }}
                           </a>

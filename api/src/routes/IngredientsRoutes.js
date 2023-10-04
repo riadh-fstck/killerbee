@@ -4,7 +4,7 @@ import {Op} from "sequelize";
 export const getIngredients = async (req, res) => {
 	try {
 		const ingredients = await Ingredient.findAll({
-			include: ["ManufacturingProcesses"],
+			include: ["Modele"],
 		});
 		res.json(ingredients);
 	} catch (error) {

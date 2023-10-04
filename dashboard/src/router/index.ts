@@ -18,6 +18,31 @@ const router = createRouter({
             path: '/register',
             name: 'register',
             component: () => import('../views/RegisterView.vue')
+        },
+        {
+            path: '/models',
+            name: 'models',
+            component: () => import('../views/models/ModelsView.vue')
+        },
+        {
+            path: '/models/create',
+            name: 'models-create',
+            component: () => import('../views/models/ModelCreate.vue')
+        },
+        {
+            path: '/models/:id/edit',
+            name: 'models-show',
+            component: () => import('../views/models/ModelEdit.vue')
+        },
+        {
+            path: '/ingredients',
+            name: 'ingredients',
+            component: () => import('../views/IngredientsView.vue')
+        },
+        {
+            path: '/process',
+            name: 'process',
+            component: () => import('../views/ProcessView.vue')
         }
     ],
     scrollBehavior(to, from, savedPosition) {

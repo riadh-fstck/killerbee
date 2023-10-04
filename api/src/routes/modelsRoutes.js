@@ -5,7 +5,7 @@ import {Op} from "sequelize";
 export const getModels = async (req, res) => {
 	try {
 		const models = await Model.findAll({
-			include: ["ManufacturingProcesses"],
+			include: ["ManufacturingProcesses", "Ingredients"],
 		});
 		res.json(models);
 	} catch (error) {
@@ -16,12 +16,6 @@ export const getModels = async (req, res) => {
 };
 
 export const createModel = async (req, res) => {
-	let user = await User.findOne({ where: { id: req.user.userId } }).then((user) => {
-		return user;
-	});
-	if (user.role !== "USR") {
-		return res.status(403).json({ message: "You are not allowed to create a model" });
-	}
 	try {
 		const model = await Model.create(req.body);
 		res.json(model);
