@@ -1,9 +1,11 @@
 import Model from "../models/postgres-model.js";
+import User from "../models/postgres-user.js";
+import {Op} from "sequelize";
 
 export const getModels = async (req, res) => {
 	try {
 		const models = await Model.findAll({
-			include: ["Brand", "Category"],
+			include: ["ManufacturingProcesses"],
 		});
 		res.json(models);
 	} catch (error) {
@@ -14,6 +16,12 @@ export const getModels = async (req, res) => {
 };
 
 export const createModel = async (req, res) => {
+	let user = await User.findOne({ where: { id: req.user.userId } }).then((user) => {
+		return user;
+	});
+	if (user.role !== "USR") {
+		return res.status(403).json({ message: "You are not allowed to create a model" });
+	}
 	try {
 		const model = await Model.create(req.body);
 		res.json(model);
@@ -68,4 +76,49 @@ export const deleteModel = async (req, res) => {
 			error: `An error occurred while deleting the model : ${error}`,
 		});
 	}
-};
+}
+
+export const getModel = async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).json({ message: "Id parameter is missing" });
+		}
+
+		const model = await Model.findOne({ where: { id } });
+
+		if (!model) return res.status(404).json({ message: "Model not found" });
+
+		res.json(model);
+	} catch (error) {
+		res.status(500).json({
+			error: `An error occurred while retrieving the model : ${error}`,
+		});
+	}
+}
+
+export const searchModels = async (req, res) => {
+	console.log(req.query)
+	try {
+		const { name } = req.query;
+
+		if (!name) {
+			return res.status(400).json({ message: "Name parameter is missing" });
+		}
+
+		const models = await Model.findAll({
+			where: {
+				name: {
+					[Op.iLike]: `%${name}%`,
+				},
+			},
+		});
+
+		res.json(models);
+	} catch (error) {
+		res.status(500).json({
+			error: `An error occurred while retrieving the models : ${error}`,
+		});
+	}
+}

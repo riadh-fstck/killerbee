@@ -3,14 +3,17 @@ import {
 	getModels,
 	createModel,
 	updateModel,
-	deleteModel,
+	deleteModel, getModel, searchModels,
 } from "../routes/modelsRoutes.js";
+import AuthMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", getModels);
-router.post("/", createModel);
-router.put("/:id", updateModel);
-router.delete("/:id", deleteModel);
+router.get("/", AuthMiddleware, getModels);
+router.post("/", AuthMiddleware,createModel);
+router.get("/search", AuthMiddleware,searchModels);
+router.put("/:id", AuthMiddleware,updateModel);
+router.delete("/:id", AuthMiddleware,deleteModel);
+router.get("/:id", AuthMiddleware,getModel);
 
 export default router;

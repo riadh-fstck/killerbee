@@ -1,10 +1,10 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/sequelize-config.js";
-import { Sequelize } from "sequelize";
+import Sequelize from "sequelize";
 
-class Category extends Model {}
+class Ingredient extends Model {}
 
-Category.init(
+Ingredient.init(
 	{
 		id: {
 			type: Sequelize.UUID,
@@ -24,21 +24,7 @@ Category.init(
 		sequelize,
 		timestamps: true,
 		paranoid: true,
-		modelName: "Category",
+		modelName: "Ingredient",
 	}
 );
-
-let Modele;
-import("./postgres-model.js")
-	.then((module) => {
-		Modele = module.default;
-
-		Category.hasMany(Modele, {
-			as: "models",
-		});
-	})
-	.catch((error) => {
-		console.error("Erreur lors de l'importation du modèle Modele :", error);
-	});
-
-export default Category;
+export default Ingredient;

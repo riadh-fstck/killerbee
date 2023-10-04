@@ -1,76 +1,15 @@
 version: "3"
 services:
-  postgresdb:
+  postgresdbkiller:
     image: postgres:15.2-alpine
-    container_name: postgresdb
+    container_name: postgresdbkiller
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: SneakPeak
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: challenge-s2
+      POSTGRES_DB: KillerBee
+      POSTGRES_USER: Killer
+      POSTGRES_PASSWORD: shwNaNEMKjBjdUX
 
     restart: always
     volumes:
       - ./db_data:/var/lib/postgresql/data
-
-  # mongodb:
-  #   image: mongo:latest
-  #   container_name: mongodb
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: challenge-s2
-  #     MONGO_INITDB_DATABASE: challenge-s2
-  #   ports:
-  #     - 27017:27017
-  #   volumes:
-  #     - ./mongo:/data/db
-
-  api:
-    image: node:latest
-    container_name: api
-    restart: always
-    working_dir: /app
-    volumes:
-      - ./api:/app
-    command: sh -c "npm install && npm run dev"
-    ports:
-      - 3000:3000
-
-  #service vuejs
-  client:
-    image: node:20.0.0-alpine
-    container_name: client
-    ports:
-      - 127.0.0.1:5173:5173
-    volumes:
-      - ./client:/home/node
-    working_dir: /home/node
-    command: sh -c "npm install && npm run dev -- --host"
-
-  dashboard:
-    image: node:20.0.0-alpine
-    container_name: dashboard
-    ports:
-      - 127.0.0.1:5174:5173
-    volumes:
-      - ./dashboard:/home/node
-    working_dir: /home/node
-    command: sh -c "npm install && npm run dev -- --host"
-
-  adminer:
-    image: adminer:4.8.1
-    container_name: adminer
-    ports:
-      - 8080:8080
-
-  # mongo-express:
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: challenge-s2
-  #     ME_CONFIG_MONGODB_URL: mongodb://root:challenge-s2@mongodb:27017

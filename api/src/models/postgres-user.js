@@ -10,11 +10,7 @@ User.init(
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        firstname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        lastname: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -33,53 +29,14 @@ User.init(
         },
         role: {
             type: DataTypes.ENUM(
-                "ROLE_ADMIN",
-                "ROLE_STORE_KEEPER",
-                "ROLE_USER"
+                "DBA",
+                "BCK",
+                "USR"
             ),
-            defaultValue: "ROLE_USER",
-            allowNull: false,
-        },
-        address: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        city: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        postalCode: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        phone: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        loginAttempts: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0,
-            allowNull: false,
-        },
-        blockedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
-        },
-        isValidate: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
+            defaultValue: "USR",
             allowNull: false,
         },
         authentificationToken: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        disabled: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-            allowNull: false,
-        },
-        encryptionKey: {
             type: DataTypes.STRING,
             allowNull: true,
         },

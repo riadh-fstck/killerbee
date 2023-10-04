@@ -1,5 +1,4 @@
 import User from "../models/postgres-user.js";
-import { sendDeletedAccountEmail } from "../services/email.service.js";
 import {
     isValidPassword,
     anonymizeUserData,
@@ -111,15 +110,8 @@ export const deleteUser = async (req, res) => {
             { where: { id } }
         );
 
-        const isEmailSent = await sendDeletedAccountEmail(
-            user.email,
-            encryptionKey
-        );
-
         res.json({
-            message: isEmailSent
-                ? "User deleted successfully"
-                : "User deleted successfully but email not sent",
+            message: "User deleted successfully"
         });
     } catch (error) {
         res.status(500).json({
