@@ -99,7 +99,6 @@ export const getModel = async (req, res) => {
 }
 
 export const searchModels = async (req, res) => {
-	console.log(req.query)
 	try {
 		const { name } = req.query;
 

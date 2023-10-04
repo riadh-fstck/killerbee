@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import LayoutAuthenticated from '../layout/LayoutAuthentificated.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <LayoutAuthenticated>
+    <div class="flex flex-col items-center justify-center h-full">
+      <h1 class="text-4xl font-bold">Welcome to the Dashboard</h1>
+    </div>
+  </LayoutAuthenticated>
 </template>
