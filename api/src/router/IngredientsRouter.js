@@ -8,7 +8,7 @@ import {
     getIngredients,
     searchIngredients,
     updateIngredient
-} from "../routes/IngredientsRoutes.js";
+} from "../routes/ingredientsRoutes.js";
 
 const router = express.Router();
 

@@ -7,7 +7,7 @@ import {
     getProcesses,
     searchProcesses,
     updateProcess
-} from "../routes/ProcessRoutes.js";
+} from "../routes/processRoutes.js";
 
 const router = express.Router();
 
