@@ -4,9 +4,7 @@ import {Op} from "sequelize";
 export const getProcesses = async (req, res) => {
     try {
         // get all processes with the model associated to each process
-        const processes = await ManufacturingProcesses.findAll({
-            include: ["Model"],
-        });
+        const processes = await ManufacturingProcesses.findAll()
         res.json(processes);
     } catch (error) {
         res.status(500).json({

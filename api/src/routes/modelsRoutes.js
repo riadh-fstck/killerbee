@@ -4,9 +4,7 @@ import {Op} from "sequelize";
 
 export const getModels = async (req, res) => {
 	try {
-		const models = await Model.findAll({
-			include: ["ManufacturingProcesses", "Ingredients"],
-		});
+		const models = await Model.findAll()
 		res.json(models);
 	} catch (error) {
 		res.status(500).json({
